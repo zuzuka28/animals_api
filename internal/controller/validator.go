@@ -62,22 +62,20 @@ func validateFrom(value string) (int, error) {
 func validateAccount(account entity.User) (entity.User, error) {
 	// todo: check spaces
 
-	valid := entity.User{Id: account.Id}
-
 	if account.FirstName == "" {
-		return valid, errors.New("bad first name")
+		return entity.User{}, errors.New("bad first name")
 	}
 	if account.LastName == "" {
-		return valid, errors.New("bad last name")
+		return entity.User{}, errors.New("bad last name")
 	}
 	if _, err := mail.ParseAddress(account.Email); err != nil {
-		return valid, errors.New("bad email")
+		return entity.User{}, errors.New("bad email")
 	}
 	if account.Password == "" {
-		return valid, errors.New("bad password")
+		return entity.User{}, errors.New("bad password")
 	}
 
-	return valid, nil
+	return account, nil
 }
 
 func validatePoint(value entity.Location) error {
@@ -91,4 +89,24 @@ func validatePoint(value entity.Location) error {
 	}
 
 	return nil
+}
+
+func validateAnimalTypeId(value string) (int64, error) {
+	animalTypeId, err := strconv.ParseInt(value, 16, 64)
+	if err != nil {
+		return -1, errors.New("animalTypeId is null")
+	}
+
+	if animalTypeId <= 0 {
+		return -1, errors.New("animalTypeId must be > 0")
+	}
+
+	return animalTypeId, nil
+}
+
+func validateAnimalType(animalType entity.AnimalType) (entity.AnimalType, error) {
+	if animalType.Type == "" {
+		return entity.AnimalType{}, errors.New("animalType.Type is null")
+	}
+	return animalType, nil
 }

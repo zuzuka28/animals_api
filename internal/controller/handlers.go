@@ -20,7 +20,7 @@ func (c *Controller) Account(ctx *gin.Context) {
 		err error
 	)
 
-	params := &entity.AccountRequestCtx{}
+	params := &entity.User{}
 
 	if params.Id, err = validateAccountId(ctx.Param(accountIdKey)); err != nil {
 		ctx.Status(http.StatusBadRequest)
@@ -147,7 +147,118 @@ func (c *Controller) SearchAnimal(ctx *gin.Context) {
 }
 
 func (c *Controller) AnimalType(ctx *gin.Context) {
+	var (
+		err error
+	)
 
+	params := &entity.AnimalType{}
+
+	if params.Id, err = validateAnimalTypeId(ctx.Param(typeIdKey)); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := c.service.GetType(params.Id)
+	if err != nil {
+		switch typed_errors.GetType(err) {
+		case typed_errors.NotFound:
+			ctx.Status(http.StatusNotFound)
+			return
+		default:
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
+func (c *Controller) NewAnimalType(ctx *gin.Context) {
+	var (
+		err        error
+		animalType entity.AnimalType
+	)
+
+	if err = ctx.BindJSON(animalType); err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := c.service.NewType(animalType)
+	if err != nil {
+		switch typed_errors.GetType(err) {
+		case typed_errors.Conflict:
+			ctx.Status(http.StatusConflict)
+			return
+		default:
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
+func (c *Controller) UpdateAnimalType(ctx *gin.Context) {
+	var (
+		err        error
+		animalType entity.AnimalType
+	)
+
+	if err = ctx.BindJSON(animalType); err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	if animalType.Id, err = validateAnimalTypeId(ctx.Param(typeIdKey)); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	if animalType, err = validateAnimalType(animalType); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	resp, err := c.service.UpdateType(animalType)
+	if err != nil {
+		switch typed_errors.GetType(err) {
+		case typed_errors.NotFound:
+			ctx.Status(http.StatusNotFound)
+			return
+		default:
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusOK, resp)
+}
+
+func (c *Controller) DeleteAnimalType(ctx *gin.Context) {
+	var (
+		err error
+	)
+
+	params := &entity.AnimalType{}
+
+	if params.Id, err = validateAnimalTypeId(ctx.Param(typeIdKey)); err != nil {
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	if err = c.service.DeleteAnimalType(params.Id); err != nil {
+		switch typed_errors.GetType(err) {
+		case typed_errors.NotFound:
+			ctx.Status(http.StatusNotFound)
+			return
+		default:
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+	}
+
+	ctx.Status(http.StatusOK)
 }
 
 func (c *Controller) Location(ctx *gin.Context) {

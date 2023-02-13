@@ -10,6 +10,10 @@ type Service interface {
 	UpdateLocation(location entity.Location) (entity.Location, error)
 	NewLocation(location entity.Location) (entity.Location, error)
 	DeleteLocation(id int64) error
+	GetType(id int64) (entity.AnimalType, error)
+	NewType(animalType entity.AnimalType) (entity.AnimalType, error)
+	UpdateType(animalType entity.AnimalType) (entity.AnimalType, error)
+	DeleteAnimalType(id int64) error
 }
 
 type AnimalService struct {
@@ -43,6 +47,35 @@ func (s *AnimalService) UpdateLocation(location entity.Location) (entity.Locatio
 }
 
 func (s *AnimalService) DeleteLocation(id int64) error {
+	// todo: read api declaration
+	return nil
+}
+
+func (s *AnimalService) GetType(id int64) (entity.AnimalType, error) {
+	// todo: read api declaration
+	return entity.AnimalType{
+		Id:   1,
+		Type: "test type",
+	}, nil
+}
+
+func (s *AnimalService) NewType(animalType entity.AnimalType) (entity.AnimalType, error) {
+	// todo: read api declaration
+	return entity.AnimalType{
+		Id:   1,
+		Type: "test type",
+	}, nil
+}
+
+func (s *AnimalService) UpdateType(animalType entity.AnimalType) (entity.AnimalType, error) {
+	// todo: read api declaration
+	return entity.AnimalType{
+		Id:   1,
+		Type: "test type",
+	}, nil
+}
+
+func (s *AnimalService) DeleteAnimalType(id int64) error {
 	// todo: read api declaration
 	return nil
 }

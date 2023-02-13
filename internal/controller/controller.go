@@ -40,8 +40,12 @@ func NewController(engine *gin.Engine, service service.Service, userService serv
 
 	c.router.GET(fmt.Sprintf("/animals/:%s", animalIdKey), c.Animal)
 	c.router.GET("/animals/search", c.SearchAnimal)
-	c.router.GET(fmt.Sprintf("/animals/types/:%s", typeIdKey), c.AnimalType)
 	c.router.GET(fmt.Sprintf("/animals/:%s/locations", animalIdKey), c.AnimalLocations)
+
+	c.router.GET(fmt.Sprintf("/animals/types/:%s", typeIdKey), c.AnimalType)
+	c.router.POST("/animals/types", c.NewAnimalType)
+	c.router.GET(fmt.Sprintf("/animals/types/:%s", typeIdKey), c.UpdateAnimalType)
+	c.router.GET(fmt.Sprintf("/animals/types/:%s", typeIdKey), c.DeleteAnimalType)
 
 	c.router.GET(fmt.Sprintf("/locations/:%s", pointIdKey), c.Location)
 	c.router.POST("/locations", c.NewLocation)
